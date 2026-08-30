@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "default": "deny",
+  "auto_execute": false,
+  "required_gates": [
+    "representative-replay",
+    "quality-non-regression",
+    "p95-p99-latency-slo",
+    "cost-verification",
+    "capacity-headroom",
+    "provider-failover",
+    "rollback-tested",
+    "human-approval"
+  ]
+}

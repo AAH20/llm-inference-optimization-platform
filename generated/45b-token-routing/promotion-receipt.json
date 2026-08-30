@@ -1,0 +1,7 @@
+{
+  "schema_version": "tokensre/v1",
+  "scenario": "45-billion-token multi-cloud LLM inference routing evaluation",
+  "evidence_level": "synthetic-evaluation",
+  "promotion": "eligible-for-canary",
+  "receipt_sha256": "36ecb87b3e63cfde990e3988078b14b117cddf253f4ffe25efad8b9ba601b442"
+}

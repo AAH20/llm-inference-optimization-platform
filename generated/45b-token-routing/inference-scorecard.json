@@ -1,0 +1,93 @@
+{
+  "schema_version": "tokensre/v1",
+  "scenario": "45-billion-token multi-cloud LLM inference routing evaluation",
+  "evidence_level": "synthetic-evaluation",
+  "promotion": "eligible-for-canary",
+  "routes": [
+    {
+      "workload": "classification",
+      "baseline": "frontier-api",
+      "candidate": "self-hosted-nim",
+      "status": "eligible",
+      "reason": "lowest cost inside quality, latency, capacity and residency envelope",
+      "monthly_tokens": 18000000000
+    },
+    {
+      "workload": "rag",
+      "baseline": "frontier-api",
+      "candidate": "self-hosted-nim",
+      "status": "eligible",
+      "reason": "lowest cost inside quality, latency, capacity and residency envelope",
+      "monthly_tokens": 12000000000
+    },
+    {
+      "workload": "code",
+      "baseline": "frontier-api",
+      "candidate": "azure-foundry-router",
+      "status": "eligible",
+      "reason": "lowest cost inside quality, latency, capacity and residency envelope",
+      "monthly_tokens": 9000000000
+    },
+    {
+      "workload": "reasoning",
+      "baseline": "frontier-api",
+      "candidate": "frontier-api",
+      "status": "eligible",
+      "reason": "lowest cost inside quality, latency, capacity and residency envelope",
+      "monthly_tokens": 6000000000
+    }
+  ],
+  "scorecard": {
+    "monthly_tokens": 45000000000,
+    "baseline_monthly_cost_usd": 234000.0,
+    "candidate_monthly_cost_usd": 126600.0,
+    "modeled_monthly_savings_usd": 107400.0,
+    "modeled_savings_pct": 45.9,
+    "candidate_weighted_quality": 0.9313,
+    "candidate_weighted_p95_ms": 1505.33,
+    "blocked_workloads": 0
+  },
+  "gpu_finops": {
+    "monthly_gpu_capacity_cost_usd": 20160.0,
+    "current_cost_per_fully_useful_capacity_unit_usd": 57600.0,
+    "target_cost_per_fully_useful_capacity_unit_usd": 31015.38,
+    "modeled_capacity_efficiency_delta_usd": 26584.62
+  },
+  "production_control": {
+    "auto_execute": false,
+    "next_step": "replay evaluation and bounded canary",
+    "required_gates": [
+      "representative replay",
+      "quality non-regression",
+      "p95 and p99 SLO",
+      "cost verification",
+      "rollback",
+      "human approval"
+    ]
+  },
+  "claim_boundary": [
+    "No live Azure Foundry, OpenRouter, NVIDIA NIM, vLLM, SGLang or TensorRT-LLM endpoint was called",
+    "No physical GPU performance is claimed",
+    "Prices, quality, latency and capacity are configurable synthetic inputs",
+    "Savings are modeled exposure, not guaranteed cash savings"
+  ],
+  "search_evidence": [
+    "LLM inference",
+    "AI gateway",
+    "model routing",
+    "inference optimization",
+    "NVIDIA NIM",
+    "vLLM",
+    "TensorRT-LLM",
+    "SGLang",
+    "Kubernetes GPU",
+    "GPU autoscaling",
+    "AI observability",
+    "LLMOps",
+    "AI FinOps",
+    "Azure AI Foundry",
+    "OpenAI-compatible API",
+    "multi-cloud AI"
+  ],
+  "receipt_sha256": "36ecb87b3e63cfde990e3988078b14b117cddf253f4ffe25efad8b9ba601b442"
+}

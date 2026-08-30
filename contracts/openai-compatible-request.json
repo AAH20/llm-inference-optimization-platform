@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TokenSRE OpenAI-compatible routing envelope",
+  "type": "object",
+  "required": ["request_id", "workload", "messages", "slo"],
+  "properties": {
+    "request_id": {"type": "string"},
+    "workload": {"enum": ["classification", "rag", "code", "reasoning"]},
+    "messages": {"type": "array"},
+    "residency": {"type": "string"},
+    "slo": {
+      "type": "object",
+      "required": ["min_quality", "max_p95_ms", "max_cost_per_million_tokens"],
+      "properties": {
+        "min_quality": {"type": "number", "minimum": 0, "maximum": 1},
+        "max_p95_ms": {"type": "integer", "minimum": 1},
+        "max_cost_per_million_tokens": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

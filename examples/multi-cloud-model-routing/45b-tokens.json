@@ -1,0 +1,66 @@
+{
+  "scenario": "45-billion-token multi-cloud LLM inference routing evaluation",
+  "backends": [
+    {
+      "name": "frontier-api",
+      "engine": "commercial-frontier-model",
+      "deployment": "managed-api",
+      "healthy": true,
+      "quality": {"classification": 0.94, "rag": 0.94, "code": 0.97, "reasoning": 0.98},
+      "p95_ms": {"classification": 1150, "rag": 1800, "code": 2800, "reasoning": 4200},
+      "cost_per_million_tokens": 5.2,
+      "capacity_rps": 900,
+      "data_residency": ["global", "eu", "us"]
+    },
+    {
+      "name": "azure-foundry-router",
+      "engine": "model-router-contract",
+      "deployment": "Azure Foundry",
+      "healthy": true,
+      "quality": {"classification": 0.91, "rag": 0.92, "code": 0.93, "reasoning": 0.94},
+      "p95_ms": {"classification": 820, "rag": 1450, "code": 2400, "reasoning": 3600},
+      "cost_per_million_tokens": 3.6,
+      "capacity_rps": 750,
+      "data_residency": ["global", "eu", "us"]
+    },
+    {
+      "name": "self-hosted-nim",
+      "engine": "NVIDIA NIM contract",
+      "deployment": "Kubernetes GPU",
+      "healthy": true,
+      "quality": {"classification": 0.93, "rag": 0.91, "code": 0.9, "reasoning": 0.88},
+      "p95_ms": {"classification": 510, "rag": 980, "code": 1900, "reasoning": 3100},
+      "cost_per_million_tokens": 2.1,
+      "capacity_rps": 680,
+      "data_residency": ["eu", "us", "on-prem"]
+    },
+    {
+      "name": "self-hosted-vllm",
+      "engine": "vLLM contract",
+      "deployment": "Kubernetes GPU",
+      "healthy": false,
+      "quality": {"classification": 0.92, "rag": 0.9, "code": 0.91, "reasoning": 0.87},
+      "p95_ms": {"classification": 470, "rag": 920, "code": 1850, "reasoning": 3000},
+      "cost_per_million_tokens": 1.9,
+      "capacity_rps": 720,
+      "data_residency": ["eu", "us", "on-prem"]
+    }
+  ],
+  "workloads": [
+    {"name": "classification", "monthly_tokens": 18000000000, "baseline_backend": "frontier-api", "min_quality": 0.9, "max_p95_ms": 1200, "peak_rps": 600, "residency": "eu"},
+    {"name": "rag", "monthly_tokens": 12000000000, "baseline_backend": "frontier-api", "min_quality": 0.91, "max_p95_ms": 1800, "peak_rps": 500, "residency": "eu"},
+    {"name": "code", "monthly_tokens": 9000000000, "baseline_backend": "frontier-api", "min_quality": 0.93, "max_p95_ms": 2800, "peak_rps": 400, "residency": "global"},
+    {"name": "reasoning", "monthly_tokens": 6000000000, "baseline_backend": "frontier-api", "min_quality": 0.97, "max_p95_ms": 4500, "peak_rps": 300, "residency": "global"}
+  ],
+  "self_hosted_gpu_economics": {
+    "gpu_count": 8,
+    "gpu_hour_rate_usd": 3.5,
+    "current_utilization": 0.35,
+    "target_utilization": 0.65
+  },
+  "search_evidence": [
+    "LLM inference", "AI gateway", "model routing", "inference optimization", "NVIDIA NIM", "vLLM",
+    "TensorRT-LLM", "SGLang", "Kubernetes GPU", "GPU autoscaling", "AI observability", "LLMOps",
+    "AI FinOps", "Azure AI Foundry", "OpenAI-compatible API", "multi-cloud AI"
+  ]
+}
