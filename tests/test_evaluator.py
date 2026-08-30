@@ -33,6 +33,17 @@ class EvaluatorTests(unittest.TestCase):
         self.assertEqual(score["baseline_monthly_cost_usd"], 234000.0)
         self.assertGreater(score["modeled_monthly_savings_usd"], 0)
 
+    def test_revenue_and_margin_are_attributed(self):
+        report = evaluate(self.intent)
+        self.assertEqual(report["scorecard"]["modeled_monthly_revenue_usd"], 6010000.0)
+        self.assertGreater(report["scorecard"]["candidate_contribution_margin_usd"], report["scorecard"]["baseline_contribution_margin_usd"])
+        self.assertTrue(all(route["contribution_margin_pct"] > 0 for route in report["routes"]))
+
+    def test_missing_request_economics_fail_closed(self):
+        del self.intent["workloads"][0]["monthly_requests"]
+        with self.assertRaises(ValueError):
+            evaluate(self.intent)
+
     def test_never_auto_executes(self):
         self.assertFalse(evaluate(self.intent)["production_control"]["auto_execute"])
 

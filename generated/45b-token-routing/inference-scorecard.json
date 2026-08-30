@@ -10,7 +10,13 @@
       "candidate": "self-hosted-nim",
       "status": "eligible",
       "reason": "lowest cost inside quality, latency, capacity and residency envelope",
-      "monthly_tokens": 18000000000
+      "monthly_tokens": 18000000000,
+      "monthly_requests": 180000000,
+      "revenue_per_request_usd": 0.012,
+      "candidate_cost_usd": 37800.0,
+      "candidate_revenue_usd": 2160000.0,
+      "contribution_margin_usd": 2122200.0,
+      "contribution_margin_pct": 98.25
     },
     {
       "workload": "rag",
@@ -18,7 +24,13 @@
       "candidate": "self-hosted-nim",
       "status": "eligible",
       "reason": "lowest cost inside quality, latency, capacity and residency envelope",
-      "monthly_tokens": 12000000000
+      "monthly_tokens": 12000000000,
+      "monthly_requests": 40000000,
+      "revenue_per_request_usd": 0.035,
+      "candidate_cost_usd": 25200.0,
+      "candidate_revenue_usd": 1400000.0,
+      "contribution_margin_usd": 1374800.0,
+      "contribution_margin_pct": 98.2
     },
     {
       "workload": "code",
@@ -26,7 +38,13 @@
       "candidate": "azure-foundry-router",
       "status": "eligible",
       "reason": "lowest cost inside quality, latency, capacity and residency envelope",
-      "monthly_tokens": 9000000000
+      "monthly_tokens": 9000000000,
+      "monthly_requests": 15000000,
+      "revenue_per_request_usd": 0.09,
+      "candidate_cost_usd": 32400.0,
+      "candidate_revenue_usd": 1350000.0,
+      "contribution_margin_usd": 1317600.0,
+      "contribution_margin_pct": 97.6
     },
     {
       "workload": "reasoning",
@@ -34,15 +52,27 @@
       "candidate": "frontier-api",
       "status": "eligible",
       "reason": "lowest cost inside quality, latency, capacity and residency envelope",
-      "monthly_tokens": 6000000000
+      "monthly_tokens": 6000000000,
+      "monthly_requests": 5000000,
+      "revenue_per_request_usd": 0.22,
+      "candidate_cost_usd": 31200.0,
+      "candidate_revenue_usd": 1100000.0,
+      "contribution_margin_usd": 1068800.0,
+      "contribution_margin_pct": 97.16
     }
   ],
   "scorecard": {
     "monthly_tokens": 45000000000,
+    "monthly_requests": 240000000,
+    "modeled_monthly_revenue_usd": 6010000.0,
     "baseline_monthly_cost_usd": 234000.0,
     "candidate_monthly_cost_usd": 126600.0,
     "modeled_monthly_savings_usd": 107400.0,
     "modeled_savings_pct": 45.9,
+    "baseline_contribution_margin_usd": 5776000.0,
+    "candidate_contribution_margin_usd": 5883400.0,
+    "candidate_contribution_margin_pct": 97.89,
+    "modeled_margin_improvement_usd": 107400.0,
     "candidate_weighted_quality": 0.9313,
     "candidate_weighted_p95_ms": 1505.33,
     "blocked_workloads": 0
@@ -64,6 +94,11 @@
       "rollback",
       "human approval"
     ]
+  },
+  "slo_control": {
+    "routing_objective": "maximize contribution margin inside quality, latency, capacity, health and residency constraints",
+    "fail_closed": true,
+    "error_budget_action": "retain baseline, freeze promotion and require operator review"
   },
   "claim_boundary": [
     "No live Azure Foundry, OpenRouter, NVIDIA NIM, vLLM, SGLang or TensorRT-LLM endpoint was called",
@@ -89,5 +124,5 @@
     "OpenAI-compatible API",
     "multi-cloud AI"
   ],
-  "receipt_sha256": "36ecb87b3e63cfde990e3988078b14b117cddf253f4ffe25efad8b9ba601b442"
+  "receipt_sha256": "bf5e5bb9a5cac29768ad403b48553c736f01476defa65895a279693e4e075c4a"
 }

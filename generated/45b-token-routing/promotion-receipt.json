@@ -3,5 +3,5 @@
   "scenario": "45-billion-token multi-cloud LLM inference routing evaluation",
   "evidence_level": "synthetic-evaluation",
   "promotion": "eligible-for-canary",
-  "receipt_sha256": "36ecb87b3e63cfde990e3988078b14b117cddf253f4ffe25efad8b9ba601b442"
+  "receipt_sha256": "bf5e5bb9a5cac29768ad403b48553c736f01476defa65895a279693e4e075c4a"
 }

@@ -2,24 +2,30 @@
 
 **Promotion:** `eligible-for-canary`
 **Evidence:** `synthetic-evaluation`
-**Receipt:** `36ecb87b3e63cfde990e3988078b14b117cddf253f4ffe25efad8b9ba601b442`
+**Receipt:** `bf5e5bb9a5cac29768ad403b48553c736f01476defa65895a279693e4e075c4a`
 
 ## Model-routing decisions
 
-| Workload | Baseline | Candidate | Status | Reason |
-|---|---|---|---|---|
-| classification | frontier-api | self-hosted-nim | eligible | lowest cost inside quality, latency, capacity and residency envelope |
-| rag | frontier-api | self-hosted-nim | eligible | lowest cost inside quality, latency, capacity and residency envelope |
-| code | frontier-api | azure-foundry-router | eligible | lowest cost inside quality, latency, capacity and residency envelope |
-| reasoning | frontier-api | frontier-api | eligible | lowest cost inside quality, latency, capacity and residency envelope |
+| Workload | Baseline | Candidate | Status | Revenue | Cost | Margin |
+|---|---|---|---|---:|---:|---:|
+| classification | frontier-api | self-hosted-nim | eligible | $2,160,000.00 | $37,800.00 | 98.25% |
+| rag | frontier-api | self-hosted-nim | eligible | $1,400,000.00 | $25,200.00 | 98.20% |
+| code | frontier-api | azure-foundry-router | eligible | $1,350,000.00 | $32,400.00 | 97.60% |
+| reasoning | frontier-api | frontier-api | eligible | $1,100,000.00 | $31,200.00 | 97.16% |
 
 ## Quality, latency and cost scorecard
 
 - `monthly_tokens`: `45000000000`
+- `monthly_requests`: `240000000`
+- `modeled_monthly_revenue_usd`: `6010000.0`
 - `baseline_monthly_cost_usd`: `234000.0`
 - `candidate_monthly_cost_usd`: `126600.0`
 - `modeled_monthly_savings_usd`: `107400.0`
 - `modeled_savings_pct`: `45.9`
+- `baseline_contribution_margin_usd`: `5776000.0`
+- `candidate_contribution_margin_usd`: `5883400.0`
+- `candidate_contribution_margin_pct`: `97.89`
+- `modeled_margin_improvement_usd`: `107400.0`
 - `candidate_weighted_quality`: `0.9313`
 - `candidate_weighted_p95_ms`: `1505.33`
 - `blocked_workloads`: `0`

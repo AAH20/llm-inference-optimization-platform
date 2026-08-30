@@ -13,11 +13,11 @@ def markdown(report: dict[str, Any]) -> str:
         "",
         "## Model-routing decisions",
         "",
-        "| Workload | Baseline | Candidate | Status | Reason |",
-        "|---|---|---|---|---|",
+        "| Workload | Baseline | Candidate | Status | Revenue | Cost | Margin |",
+        "|---|---|---|---|---:|---:|---:|",
     ]
     for route in report["routes"]:
-        lines.append(f"| {route['workload']} | {route['baseline']} | {route['candidate'] or 'none'} | {route['status']} | {route['reason']} |")
+        lines.append(f"| {route['workload']} | {route['baseline']} | {route['candidate'] or 'none'} | {route['status']} | ${route['candidate_revenue_usd']:,.2f} | ${route['candidate_cost_usd']:,.2f} | {route['contribution_margin_pct']:.2f}% |")
     lines.extend(["", "## Quality, latency and cost scorecard", ""])
     for key, value in report["scorecard"].items():
         lines.append(f"- `{key}`: `{value}`")

@@ -31,6 +31,12 @@ class RouteDecision:
     status: str
     reason: str
     monthly_tokens: int
+    monthly_requests: int
+    revenue_per_request_usd: float
+    candidate_cost_usd: float
+    candidate_revenue_usd: float
+    contribution_margin_usd: float
+    contribution_margin_pct: float
 
     def as_dict(self) -> dict[str, Any]:
         return self.__dict__.copy()

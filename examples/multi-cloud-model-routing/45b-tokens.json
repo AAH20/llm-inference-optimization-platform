@@ -47,10 +47,10 @@
     }
   ],
   "workloads": [
-    {"name": "classification", "monthly_tokens": 18000000000, "baseline_backend": "frontier-api", "min_quality": 0.9, "max_p95_ms": 1200, "peak_rps": 600, "residency": "eu"},
-    {"name": "rag", "monthly_tokens": 12000000000, "baseline_backend": "frontier-api", "min_quality": 0.91, "max_p95_ms": 1800, "peak_rps": 500, "residency": "eu"},
-    {"name": "code", "monthly_tokens": 9000000000, "baseline_backend": "frontier-api", "min_quality": 0.93, "max_p95_ms": 2800, "peak_rps": 400, "residency": "global"},
-    {"name": "reasoning", "monthly_tokens": 6000000000, "baseline_backend": "frontier-api", "min_quality": 0.97, "max_p95_ms": 4500, "peak_rps": 300, "residency": "global"}
+    {"name": "classification", "monthly_tokens": 18000000000, "monthly_requests": 180000000, "revenue_per_request_usd": 0.012, "baseline_backend": "frontier-api", "min_quality": 0.9, "max_p95_ms": 1200, "peak_rps": 600, "residency": "eu"},
+    {"name": "rag", "monthly_tokens": 12000000000, "monthly_requests": 40000000, "revenue_per_request_usd": 0.035, "baseline_backend": "frontier-api", "min_quality": 0.91, "max_p95_ms": 1800, "peak_rps": 500, "residency": "eu"},
+    {"name": "code", "monthly_tokens": 9000000000, "monthly_requests": 15000000, "revenue_per_request_usd": 0.09, "baseline_backend": "frontier-api", "min_quality": 0.93, "max_p95_ms": 2800, "peak_rps": 400, "residency": "global"},
+    {"name": "reasoning", "monthly_tokens": 6000000000, "monthly_requests": 5000000, "revenue_per_request_usd": 0.22, "baseline_backend": "frontier-api", "min_quality": 0.97, "max_p95_ms": 4500, "peak_rps": 300, "residency": "global"}
   ],
   "self_hosted_gpu_economics": {
     "gpu_count": 8,
