@@ -15,6 +15,8 @@ class Backend:
     cost_per_million_tokens: float
     capacity_rps: int
     data_residency: tuple[str, ...]
+    base_url: str | None = None
+    api_key_env: str | None = None
 
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> "Backend":

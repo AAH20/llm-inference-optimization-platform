@@ -20,7 +20,9 @@ flowchart LR
 
 ## Control-plane boundary
 
-TokenSRE recommends a bounded route; it does not impersonate an inference provider. The current API returns a route and deterministic receipt with `auto_execute: false`. Provider credentials, streaming proxy behavior, retries, circuit breakers and live telemetry exporters remain explicit integration work.
+TokenSRE exposes an authenticated OpenAI-compatible gateway. It proxies buffered or SSE streaming requests to configured upstreams, carries correlation and evidence-receipt headers, and fails over on transport errors, HTTP 429 and upstream 5xx responses. A per-backend circuit breaker prevents repeated traffic to a failing service. Prometheus exports request, latency and failover metrics.
+
+The deterministic evaluator remains deliberately separate from live traffic. Synthetic quality, price and performance inputs may choose candidate ordering, but they never constitute physical benchmark evidence. Production operators must replace those values with signed evaluation and billing records.
 
 ## Production invariants
 
@@ -29,7 +31,9 @@ TokenSRE recommends a bounded route; it does not impersonate an inference provid
 3. Cost is optimized only inside that production envelope.
 4. Missing request economics fails validation.
 5. Every report is deterministic for the same canonical scenario.
-6. A recommendation cannot promote itself to production.
+6. A recommendation cannot mutate policy or promote itself to production.
+7. Production mode fails closed when gateway authentication is absent.
+8. Secrets enter through environment-backed Kubernetes Secrets; they are never stored in scenarios or receipts.
 
 ## Multi-cloud deployment paths
 
@@ -38,4 +42,4 @@ TokenSRE recommends a bounded route; it does not impersonate an inference provid
 - **Google Cloud:** GKE GPU pools or managed provider endpoints behind the same route contract.
 - **On premises / sovereign:** Kubernetes-hosted NIM, Dynamo, vLLM or compatible engines with explicit residency tags.
 
-These are architectural interfaces. Only the deterministic local evaluator and decision API are implemented in this release.
+All OpenAI-compatible endpoints can use the live adapter. Provider-specific authentication shapes, model catalogs and non-OpenAI protocols require dedicated adapters. No Azure, NVIDIA or commercial endpoint is provisioned or benchmarked by the repository itself.

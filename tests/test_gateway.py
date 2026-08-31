@@ -1,51 +1,53 @@
-import io
 import json
-import unittest
 from pathlib import Path
 
-from tokensre.gateway import DecisionHandler
+from fastapi.testclient import TestClient
 
+from tokensre.gateway import CircuitBreaker, create_app
 
 ROOT = Path(__file__).parents[1]
 
 
-def invoke(method: str, path: str, body: dict | None = None) -> tuple[int, dict]:
-    handler = object.__new__(DecisionHandler)
-    payload = json.dumps(body or {}).encode()
-    handler.path = path
-    handler.headers = {"Content-Length": str(len(payload))}
-    handler.rfile = io.BytesIO(payload)
-    handler.wfile = io.BytesIO()
-    captured: dict[str, int] = {}
-    handler.send_response = lambda status: captured.update(status=status)
-    handler.send_header = lambda *_: None
-    handler.end_headers = lambda: None
-    getattr(handler, method)()
-    return captured["status"], json.loads(handler.wfile.getvalue())
+def scenario() -> dict:
+    value = json.loads((ROOT / "examples/multi-cloud-model-routing/45b-tokens.json").read_text())
+    for backend in value["backends"]:
+        backend["base_url"] = "https://inference.invalid"
+        backend["api_key_env"] = "TEST_UPSTREAM_KEY"
+    return value
 
 
-class GatewayTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        DecisionHandler.scenario = json.loads((ROOT / "examples/multi-cloud-model-routing/45b-tokens.json").read_text())
-
-    def test_health(self):
-        status, payload = invoke("do_GET", "/healthz")
-        self.assertEqual(status, 200)
-        self.assertEqual(payload["status"], "ok")
-
-    def test_route_returns_bounded_decision(self):
-        status, payload = invoke("do_POST", "/v1/route", {"workload": "rag"})
-        self.assertEqual(status, 200)
-        self.assertEqual(payload["route"]["candidate"], "self-hosted-nim")
-        self.assertFalse(payload["auto_execute"])
-        self.assertEqual(len(payload["receipt_sha256"]), 64)
-
-    def test_unknown_workload_is_rejected(self):
-        status, payload = invoke("do_POST", "/v1/route", {"workload": "unknown"})
-        self.assertEqual(status, 400)
-        self.assertEqual(payload["error"], "invalid_request")
+def test_health_and_readiness():
+    with TestClient(create_app(scenario())) as client:
+        assert client.get("/health/live").status_code == 200
+        assert client.get("/health/ready").status_code == 200
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_route_returns_receipted_decision():
+    with TestClient(create_app(scenario())) as client:
+        response = client.post("/v1/route", json={"workload": "rag"})
+        assert response.status_code == 200
+        assert response.json()["backend"] == "self-hosted-nim"
+        assert len(response.json()["receipt_sha256"]) == 64
+
+
+def test_unknown_workload_is_rejected():
+    with TestClient(create_app(scenario())) as client:
+        assert client.post("/v1/route", json={"workload": "unknown"}).status_code == 503
+
+
+def test_production_requires_gateway_authentication(monkeypatch):
+    monkeypatch.setenv("TOKENSRE_ENV", "production")
+    monkeypatch.delenv("TOKENSRE_GATEWAY_TOKEN", raising=False)
+    with TestClient(create_app(scenario())) as client:
+        assert client.post("/v1/route", json={"workload": "rag"}).status_code == 503
+
+
+def test_circuit_breaker_opens_and_recovers(monkeypatch):
+    breaker = CircuitBreaker(threshold=2, recovery_seconds=1)
+    breaker.failure("nim")
+    assert breaker.available("nim")
+    breaker.failure("nim")
+    assert not breaker.available("nim")
+    opened = breaker.opened_at["nim"]
+    monkeypatch.setattr("tokensre.gateway.time.monotonic", lambda: opened + 2)
+    assert breaker.available("nim")

@@ -4,20 +4,21 @@ Exact Google or LinkedIn search-volume figures require proprietary keyword/recru
 
 | Search or hiring term | Repository evidence | Claim status |
 |---|---|---|
-| LLM inference | Workload evaluation and backend profiles | Implemented simulation |
-| AI gateway / OpenAI-compatible API | `/v1/route` decision API and request contract | Decision API implemented; streaming proxy not claimed |
+| AI infrastructure / Generative AI | Production gateway, Kubernetes runtime and Azure deployment plane | Implemented reference platform |
+| LLM inference | Workload evaluation, live upstream adapters and backend profiles | Implemented; benchmark inputs remain synthetic |
+| AI gateway / OpenAI-compatible API | Authenticated `/v1/chat/completions`, SSE streaming and `/v1/route` | Implemented |
 | model routing | Quality, latency, cost, capacity and residency selector | Implemented |
 | inference optimization | Baseline/candidate scorecard | Implemented |
 | NVIDIA NIM | Self-hosted NIM backend contract | Synthetic profile; no endpoint called |
 | vLLM | Health-aware vLLM backend contract | Synthetic profile; no endpoint called |
 | TensorRT-LLM / SGLang / NVIDIA Dynamo | Adapter roadmap | Not implemented |
-| Azure AI Foundry | Foundry router contract and Azure evidence plane | Synthetic profile; no model deployed |
-| OpenRouter | Provider-adapter roadmap | Not implemented |
-| Kubernetes / GPU autoscaling | Deployment, probes, security context and HPA example | Control plane deployable; GPU metrics remain synthetic |
-| AI observability / LLM observability | Evaluation receipts and Azure monitoring IaC | Baseline implemented |
+| Azure OpenAI / Azure AI Foundry | OpenAI-compatible adapter contract and Azure evidence plane | Adapter implemented; no model deployed by this repository |
+| OpenRouter | OpenAI-compatible adapter | Implemented; requires customer credentials |
+| Kubernetes / AKS / GPU autoscaling | HA deployment, probes, PDB, topology spread, security context and HPA | Gateway deployable; physical GPU results not claimed |
+| AI observability / OpenTelemetry | Prometheus request, latency and failover telemetry plus Azure monitoring IaC | Implemented baseline |
 | LLMOps | CI evaluation and controlled promotion | Implemented baseline |
 | AI FinOps / cost per token / unit economics | Per-workload revenue, inference cost and contribution margin | Implemented with modeled inputs |
-| multi-cloud AI | Provider-neutral backend abstraction | Implemented contract |
+| multi-cloud AI / hybrid cloud | Provider-neutral live upstream abstraction | Implemented |
 | sovereign AI / on-prem LLM | Residency-aware routing | Implemented contract |
 
 ## Current terminology sources

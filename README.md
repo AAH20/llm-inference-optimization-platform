@@ -2,11 +2,11 @@
 
 ## LLM Inference Optimization, AI Gateway, Model Routing, NVIDIA Dynamo, NIM, vLLM, Kubernetes GPU Autoscaling, LLMOps, Observability and FinOps
 
-**TokenSRE** is an open-source, provider-neutral decision plane for production LLM inference. It determines whether a route satisfies quality, latency, cost, capacity, availability and data-residency requirements, calculates its contribution margin, then produces a bounded canary recommendation and reproducible receipt.
+**TokenSRE** is an open-source AI infrastructure control plane and authenticated OpenAI-compatible AI gateway for production LLM inference. It routes buffered and streaming traffic across Azure AI Foundry, Azure OpenAI, NVIDIA NIM, vLLM, SGLang, OpenRouter and compatible endpoints while enforcing quality, latency, cost, capacity, availability and data-residency policies. It calculates contribution margin and emits reproducible evidence receipts.
 
 [![LLM inference optimization CI](https://github.com/AAH20/llm-inference-optimization-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/AAH20/llm-inference-optimization-platform/actions/workflows/ci.yml)
 
-> **Claim boundary:** the reference scenario is a deterministic synthetic evaluation. It does not call Azure Foundry, OpenRouter, NVIDIA NIM, vLLM, SGLang or TensorRT-LLM and does not claim physical GPU performance.
+> **Claim boundary:** the gateway contains live OpenAI-compatible upstream adapters, streaming, failover, circuit breaking, authentication and Prometheus telemetry. The included 45B-token scenario is still synthetic: validation does not use customer credentials, call a paid endpoint or claim physical GPU performance.
 
 ## Business problem: profitable, reliable AI inference
 
@@ -33,6 +33,7 @@ flowchart LR
 ```
 
 See [the production architecture and claim boundaries](docs/architecture.md).
+See also the [mandatory production-acceptance gates](docs/production-readiness.md); “production-ready” is an environment-specific acceptance result, not a repository badge.
 
 ## Executable multi-cloud model-routing case study
 
@@ -65,7 +66,7 @@ The evaluator:
 
 The configured case study models **$6.01M monthly revenue**. This is a scenario input, not realized A2Z SOC revenue. The generated scorecard shows baseline and candidate contribution margins, route-level cost and the assumptions behind every figure.
 
-## OpenAI-compatible decision API
+## Production OpenAI-compatible AI gateway
 
 Run the bounded route-decision API locally:
 
@@ -78,7 +79,21 @@ curl -s http://127.0.0.1:8080/v1/route \
   -d '{"workload":"rag"}'
 ```
 
-The response contains a selected backend, workload economics, evidence receipt and `auto_execute: false`. Streaming proxying, provider authentication and live traffic execution are not claimed.
+Configure each backend with `base_url` and `api_key_env`, inject credentials through a secret manager, and set `TOKENSRE_GATEWAY_TOKEN`. Production mode fails closed without gateway authentication.
+
+```bash
+export TOKENSRE_ENV=production
+export TOKENSRE_GATEWAY_TOKEN='from-a-secret-manager'
+export NVIDIA_NIM_API_KEY='from-a-secret-manager'
+
+curl -N http://127.0.0.1:8080/v1/chat/completions \
+  -H "authorization: Bearer $TOKENSRE_GATEWAY_TOKEN" \
+  -H 'x-tokensre-workload: rag' \
+  -H 'content-type: application/json' \
+  -d '{"model":"configured-upstream-model","messages":[{"role":"user","content":"Explain the request path"}],"stream":true}'
+```
+
+The gateway returns `x-tokensre-backend`, `x-request-id` and `x-tokensre-receipt` headers. It retries eligible fallbacks after transport errors, rate limiting or upstream 5xx failures and exports Prometheus request, latency and failover metrics.
 
 ## NVIDIA Dynamo, NIM, vLLM, TensorRT-LLM and SGLang
 
@@ -142,10 +157,9 @@ See the [search and ATS evidence map](docs/search-and-ats-evidence.md) and [cont
 
 ## Roadmap
 
-- OpenAI-compatible authenticated streaming proxy
-- Live Azure Foundry and OpenRouter adapters
-- NVIDIA NIM, vLLM, TensorRT-LLM, SGLang and Dynamo adapters
-- OpenTelemetry semantic conventions and Prometheus dashboards
+- Provider-specific Azure Entra ID and managed-identity adapters
+- Signed live benchmark ingestion and billing-export reconciliation
+- OpenTelemetry GenAI semantic conventions and Grafana dashboards
 - KEDA token-queue and KV-cache autoscaling
 - Model-download and cache-placement optimization
 - Provider outage and quota-exhaustion fault injection
